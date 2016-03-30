@@ -2,7 +2,7 @@ import flask
 import report
 import scripts
 
-from JR import app
+from jenkins_report import app
 
 @app.route('/')
 def hello_world():

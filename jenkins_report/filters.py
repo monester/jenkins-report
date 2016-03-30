@@ -1,6 +1,6 @@
 import report
 
-from JR import app
+from jenkins_report import app
 
 @app.template_filter('ts_to_time')
 def _jinja2_filter_datetime(timestamp):
