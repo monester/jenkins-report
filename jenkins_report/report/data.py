@@ -1,6 +1,5 @@
 import dataset
 import graph_bokeh
-from datetimeutils import datetime_from_timestamp
 
 
 def get_builds(dbname, offset=0, limit=20, query=None, **kwargs):
@@ -15,11 +14,13 @@ def get_builds(dbname, offset=0, limit=20, query=None, **kwargs):
 
     return builds
 
+
 def get_graph(dbname, limit=5000, **kwargs):
 
     builds = get_builds(dbname, limit=limit, **kwargs)
 
     return graph_bokeh.figure_as_html(builds, title="last %s builds" % limit)
+
 
 def get_last_builds(db):
 
@@ -33,10 +34,11 @@ def get_last_builds(db):
                 query='select max(timestamp) from builds'
             )
             last_builds[dbname] = next(result)['max(timestamp)']
-        except Exception as e:
+        except Exception:
             pass
 
     return last_builds
+
 
 def get_data_for_job(dbname, job):
 
@@ -44,6 +46,7 @@ def get_data_for_job(dbname, job):
     builds = list(get_builds(dbname, query=query, limit=100))
 
     return (graph_bokeh.figure_as_html(builds, title="Job: %s" % job), builds)
+
 
 def get_data_for_jobs(dbname, string):
 

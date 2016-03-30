@@ -12,5 +12,5 @@ else:
     env_config_silent = True
 app.config.from_envvar('JENKINS_REPORT_SETTINGS', silent=env_config_silent)
 
-import jenkins_report.views
-import jenkins_report.filters
+import jenkins_report.views  # noqa
+import jenkins_report.filters  # noqa

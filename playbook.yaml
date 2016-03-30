@@ -1,0 +1,43 @@
+- hosts:
+  - jenkins-report.dev.infra.mirantis.net
+  handlers:
+    - name: restart nginx
+      service: name=nginx state=restarted
+    - name: restart uwsgi
+      service: name=uwsgi state=restarted
+  tasks:
+      - apt: name={{item}} state=present update_cache=yes
+        with_items:
+          - build-essential
+          - python-dev
+          - uwsgi
+          - uwsgi-plugin-python
+          - nginx
+          - python-pip
+          - python-setuptools
+        when: ansible_os_family == "Debian"
+      - yum: name={{item}} state=present
+        with_items:
+          - gcc
+          - python-devel
+          - uwsgi
+          - nginx
+        when: ansible_os_family == "RedHat"
+      - file: path=/etc/jenkins_report state=directory
+      - file: path=/var/lib/jenkins_report state=directory
+      - stat: path=/etc/jenkins_report/config.py
+        register: config_file
+      - copy: src=config.example.py dest=/etc/jenkins_report/config.py
+        when: config_file.stat.exists == False
+      - pip: name='git+https://github.com/monester/jenkins-report.git@v0.0.1#egg=jenkins_report'
+      - file: path=/etc/nginx/sites-enabled/default state=absent
+        notify:
+          - restart nginx
+      - copy: src=configs/nginx.conf dest=/etc/nginx/sites-enabled/jenkins-report.conf
+        notify:
+          - restart nginx
+      - copy: src=configs/uwsgi.yaml dest=/etc/uwsgi/apps-enabled/jenkins-report.yaml
+        notify:
+          - restart uwsgi
+      - cron: name='update jenkinses' minute='*/10' 
+              job='JENKINS_REPORT_SETTINGS=/etc/jenkins_report/config.py /usr/local/bin/jenkins_report_import_all.py'

@@ -8,6 +8,7 @@ Functions which require access to Jenkins Master
 
 logger = logging.getLogger(__name__)
 
+
 def list_downstream(jenkins_url, job, number='lastBuild'):
     '''Get list of downstream builds
 

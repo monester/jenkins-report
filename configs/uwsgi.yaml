@@ -1,0 +1,7 @@
+uwsgi:
+  socket: 127.0.0.1:3031
+  module: jenkins_report:app
+  plugin: python27
+  env:
+    - JENKINS_REPORT_SETTINGS=/etc/jenkins_report/config.py
+    - PYTHON_EGG_CACHE=/tmp/.python-eggs

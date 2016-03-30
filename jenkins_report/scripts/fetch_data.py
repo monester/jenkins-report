@@ -6,6 +6,7 @@ import dataset
 
 logger = logging.getLogger(__name__)
 
+
 def fetch_builds_data(jenkins_url):
     '''Get json data of all Jenkins builds
 
@@ -47,6 +48,7 @@ def fetch_builds_data(jenkins_url):
     logger.info("Fetched %d job entries" % len(builds_data))
     return builds_data
 
+
 def store_builds_data(builds_data, dbname):
     '''Saves builds_data in SQLite database
 
@@ -80,13 +82,14 @@ def store_builds_data(builds_data, dbname):
         for build in job_entry['builds']:
             if build['timestamp'] >= last_stored_build_timestamp:
                 build['name'] = job_entry['name']
-                table.upsert(build, ['name','number'])
+                table.upsert(build, ['name', 'number'])
             else:
-                skipped_counter+=1
+                skipped_counter += 1
     logger.debug("Skipped builds: %d" % skipped_counter)
     db.commit()
 
     return len(db['builds'])
+
 
 def update_builds_db(dbname, source_file=None, source_url=None):
 
@@ -99,6 +102,7 @@ def update_builds_db(dbname, source_file=None, source_url=None):
         raise ValueError("No URL and no source file specified")
 
     return store_builds_data(builds_data, dbname)
+
 
 def update_db(dbname, source):
 
@@ -115,6 +119,7 @@ def update_db(dbname, source):
 
     return store_builds_data(builds_data, dbname)
 
+
 if __name__ == '__main__':
 
     logger.setLevel(logging.INFO)
@@ -123,21 +128,17 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-f', '--datafile',
                         help="file with JSON source data",
-                        default=None,
-    )
+                        default=None)
     parser.add_argument('--url',
                         help="URL of Jenkins instance",
-                        default=None,
-    )
+                        default=None)
     parser.add_argument('-d', '--dbname',
                         help="Filename of the SQLite database",
-                        default='output.db'
-    )
+                        default='output.db')
 
     parser.add_argument('-v', '--verbose',
                         help="Enable debug output",
-                        action="store_true",
-    )
+                        action="store_true")
 
     args = parser.parse_args()
 

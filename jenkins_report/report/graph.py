@@ -1,10 +1,8 @@
-#from matplotlib import pyplot as plt
 import logging
-
-from datetimeutils import *
-
+from datetimeutils import *  # noqa
 
 logger = logging.getLogger(__name__)
+
 
 def set_hourly_x_ticks(plt):
     '''Set X-Axis to show hours'''
@@ -28,6 +26,7 @@ def set_hourly_x_ticks(plt):
         rotation='vertical',
     )
 
+
 def result_to_color(result):
     if result == 'SUCCESS':
         return 'green'
@@ -37,6 +36,7 @@ def result_to_color(result):
         return 'gray'
     else:
         return 'blue'
+
 
 def plot_data(builds_data, nodes, title="Graph"):
     # left: timestamp
@@ -55,7 +55,7 @@ def plot_data(builds_data, nodes, title="Graph"):
     max_time = datetime_to_timestamp(datetime.datetime.now())
 
     for build_data in builds_data:
-        print build_data
+        logging.info(build_data)
         left.append(build_data['timestamp'])
         if build_data['duration'] == 0:
             logger.debug("Build %s is still running" % build_data['fullDisplayName'])
@@ -69,8 +69,8 @@ def plot_data(builds_data, nodes, title="Graph"):
 
     plt.barh(bottom, width, height, left, color=color, alpha=0.2, linewidth=0.1)
     plt.yticks(
-        xrange(5, len(nodes)*11, 11),
-        map(lambda node: node.replace("mirantis.net",".."), nodes),
+        xrange(5, len(nodes) * 11, 11),
+        map(lambda node: node.replace("mirantis.net", ".."), nodes),
         fontsize=6,
     )
 
@@ -80,7 +80,7 @@ def plot_data(builds_data, nodes, title="Graph"):
     plt.title(title)
 
     # Set labels for every bar
-    counters = [0] * len(nodes)
+    # counters = [0] * len(nodes)
     # for i in xrange(len(names)):
     #     l, b, name = left[i], bottom[i], names[i]
     #     plt.text(

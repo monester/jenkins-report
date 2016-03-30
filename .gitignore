@@ -4,3 +4,4 @@ venv
 config.py
 *.db
 *.log
+.tox

@@ -1,14 +1,14 @@
 from bokeh.plotting import figure, ColumnDataSource
-from bokeh.io import vform
 from bokeh.embed import components
 from bokeh.models import HoverTool
 
 import logging
 
-from datetimeutils import *
+from datetimeutils import *  # noqa
 
 
 logger = logging.getLogger(__name__)
+
 
 def get_build_color(build_data):
 
@@ -22,6 +22,7 @@ def get_build_color(build_data):
 
     return color_map.get(build_data['result'], color_map['other'])
 
+
 def figure_as_html(builds_data, nodes=None, title=None, with_labels=False):
     ''' For every build in builds_data draw rectangle with data:
 
@@ -34,7 +35,6 @@ def figure_as_html(builds_data, nodes=None, title=None, with_labels=False):
     '''
 
     # Data
-
     center_x = []
     center_y = []
     width = []
@@ -67,7 +67,6 @@ def figure_as_html(builds_data, nodes=None, title=None, with_labels=False):
         center_y.append(build_data['builtOn'])
         color.append(build_color)
 
-
     source = ColumnDataSource(
         data=dict(
             x=center_x,
@@ -83,15 +82,13 @@ def figure_as_html(builds_data, nodes=None, title=None, with_labels=False):
         nodes = sorted(list(set(center_y)))
 
     # Plot properties
-
-    TOOLS="pan,xwheel_zoom,box_zoom,reset,previewsave,hover,resize"
+    TOOLS = "pan,xwheel_zoom,box_zoom,reset,previewsave,hover,resize"
 
     p = figure(x_axis_type="datetime", y_range=nodes, width=900,
                tools=TOOLS,
                title=title,
                toolbar_location="below",
-               height=max(min(len(nodes)* 40, 800),100),
-    )
+               height=max(min(len(nodes) * 40, 800), 100))
 
     hover = p.select(dict(type=HoverTool))
     hover.tooltips = '<font color="@color">&bull;</font> @label'
@@ -101,8 +98,7 @@ def figure_as_html(builds_data, nodes=None, title=None, with_labels=False):
            line_width=1,
            line_color='white',
            line_alpha=0.4,
-           fill_alpha=0.4,
-    )
+           fill_alpha=0.4)
 
     if with_labels:
         # Add labels layer
@@ -114,10 +110,8 @@ def figure_as_html(builds_data, nodes=None, title=None, with_labels=False):
                text_baseline='middle',
                text_alpha=0.8,
                x_offset=map(lambda x: x % 3 * 20, xrange(len(label))),
-               y_offset=map(lambda y: y % 2 * 10 -5 , xrange(len(label))),
-        )
+               y_offset=map(lambda y: y % 2 * 10 - 5, xrange(len(label))))
 
     # To HTML
-
     script, div = components(p)
     return script + div

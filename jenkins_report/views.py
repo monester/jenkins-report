@@ -4,10 +4,12 @@ import scripts
 
 from jenkins_report import app
 
+
 @app.route('/')
 def hello_world():
     last_builds = report.get_last_builds(app.config['DB'])
     return flask.render_template('hello.html', last=last_builds)
+
 
 @app.route('/db/<db_name>/builds')
 def show_builds_from_db(db_name):
@@ -17,8 +19,8 @@ def show_builds_from_db(db_name):
     builds = report.get_builds(dbname, offset=offset, limit=limit)
     return flask.render_template('builds.html',
                                  builds=builds,
-                                 title="Builds for %s" % app.config['DB'][db_name]['description']
-    )
+                                 title="Builds for %s" % app.config['DB'][db_name]['description'])
+
 
 @app.route('/db/<db_name>/graph')
 def show_graph_from_db(db_name):
@@ -26,8 +28,8 @@ def show_graph_from_db(db_name):
     graph = report.get_graph(dbname)
     return flask.render_template('graph.html',
                                  title="Graph for %s" % app.config['DB'][db_name]['description'],
-                                 graph=graph
-    )
+                                 graph=graph)
+
 
 @app.route('/update/<db_name>')
 def update_db(db_name):
@@ -43,6 +45,7 @@ def update_db(db_name):
         content = "%s" % "Speak, friend, and enter"
 
     return flask.render_template('page.html', title=title, content=content)
+
 
 @app.route('/db/<db_name>/ds/<job>/lastBuild')
 @app.route('/db/<db_name>/ds/<job>/last')
@@ -69,8 +72,8 @@ def show_downstream(db_name, job, number='lastBuild'):
 
     return flask.render_template('graph_and_builds.html',
                                  builds=builds_data,
-                                 graph=graph,
-    )
+                                 graph=graph)
+
 
 @app.route('/db/<db_name>/job/<job>')
 def show_job(db_name, job):
@@ -81,8 +84,8 @@ def show_job(db_name, job):
     return flask.render_template('graph_and_builds.html',
                                  builds=builds,
                                  graph=graph,
-                                 title="%s - %s" % (db_name, job),
-    )
+                                 title="%s - %s" % (db_name, job))
+
 
 @app.route('/db/<db_name>/jobs/<string>')
 def show_jobs(db_name, string):
@@ -93,5 +96,4 @@ def show_jobs(db_name, string):
     return flask.render_template('graph_and_builds.html',
                                  builds=builds,
                                  graph=graph,
-                                 title="%s - %s" % (db_name, string),
-    )
+                                 title="%s - %s" % (db_name, string))

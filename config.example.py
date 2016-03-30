@@ -9,7 +9,7 @@
 DB = {
     'test': {
         'description': 'Test Data',
-        'filename': 'test.db',
+        'filename': '/var/lib/jenkins_report/test.db',
         'source': {
             'file': 'test.data'
         },
@@ -17,7 +17,7 @@ DB = {
     },
     'fedora': {
         'description': 'Fedora Jenkins',
-        'filename': 'fedora.db',
+        'filename': '/var/lib/jenkins_report/fedora.db',
         'source': {
             'url': 'http://jenkins.cloud.fedoraproject.org'
         },
